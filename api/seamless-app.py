@@ -5,6 +5,7 @@ import torch
 import torchaudio
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from seamless_communication.inference import Translator
 
@@ -30,6 +31,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.mount("/static", StaticFiles(directory="./static"), name="static")
 
 model_version = '1'
 
@@ -61,6 +64,6 @@ async def create_item(req: Text2SpeechReq):
                                       src_lang=req.srcLang,
                                       tgt_lang=req.tgtLang)
     wavdata = speech.audio_wavs[0].cpu().numpy()[0]
-    torchaudio.save('output-speech.wav', torch.FloatTensor(wavdata), sample_rate=speech.sample_rate)
+    torchaudio.save('static/output-speech.wav', torch.FloatTensor(wavdata), sample_rate=speech.sample_rate)
 
     return {'code': 200, 'message': 'ok', 'text': str(text)}

@@ -37,9 +37,10 @@ export default {
       axios.post('http://127.0.0.1:8000/api/v1/text2speech', 
         {text: text, srcLang: 'eng', tgtLang: 'cmn'})
         .then(resp => { 
-          console.log('success', resp) 
-          console.log(resp.data.text)
+          console.log('success', resp)
           self.outputText = resp.data.text
+          let audio = new Audio('http://localhost:8000/static/output-speech.wav')
+          audio.play()
         })
         .catch(err => console.error(err));
       }
