@@ -17,6 +17,7 @@ class Text2SpeechReq(BaseModel):
 
 origins = [
     "http://localhost",
+    "http://localhost:9528",
     "http://localhost:8000",
 ]
 
