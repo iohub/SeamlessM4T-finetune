@@ -4,6 +4,7 @@ from transformers import AutoProcessor, SeamlessM4Tv2Model
 import torch
 import torchaudio
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from seamless_communication.inference import Translator
 
@@ -14,7 +15,21 @@ class Text2SpeechReq(BaseModel):
     tgtLang: str
 
 
+origins = [
+    "http://localhost",
+    "http://localhost:8000",
+]
+
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 model_version = '1'
 
 if model_version == 'v2':
